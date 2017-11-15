@@ -334,6 +334,16 @@
       });
     };
 
+    // bind sections changes
+    var sectionChangeListener = function () {
+			var currentSection = getSectionIndexAt(getWindowTop() + ($(window).height() / 2));
+
+			if (typeof currentSection !== "undefined" && currentSection !== lastSection) {
+				options.eventEmitter.emitEvent('sectionChange', [currentSection, lastSection]);
+				lastSection = currentSection;
+			}
+    }
+
     // Remove all functions bound to mouse events
     var unbindScroll = function () {
       $(window).unbind(MOUSE_EVENTS_STRING);
@@ -374,6 +384,13 @@
         if (matchedObject.length > 0) {
           scrollToPixel(matchedObject[0].offsetTop + sectionWrapperTop, 0);
         }
+      }
+      
+      // sections changes
+      
+      if (options.eventEmitter !== null) {
+        sectionChangeListener();
+        $(window).bind('scroll.section-change', sectionChangeListener);
       }
     }, 50);
 
