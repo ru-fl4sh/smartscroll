@@ -130,6 +130,8 @@
 
     var currentHash = window.location.hash;
 
+    var lastSection = -1;
+
     // Store the current section wrapper method for later use
     var sectionWrapper = $(options.sectionWrapperSelector + ':first');
 
@@ -336,13 +338,13 @@
 
     // bind sections changes
     var sectionChangeListener = function () {
-			var currentSection = getSectionIndexAt(getWindowTop() + ($(window).height() / 2));
+      var currentSection = getSectionIndexAt(getWindowTop() + ($(window).height() / 2));
 
-			if (typeof currentSection !== "undefined" && currentSection !== lastSection) {
-				options.eventEmitter.emitEvent('sectionChange', [currentSection, lastSection]);
-				lastSection = currentSection;
-			}
-    }
+      if (typeof currentSection !== 'undefined' && currentSection !== lastSection) {
+        options.eventEmitter.emitEvent('sectionChange', [currentSection, lastSection]);
+        lastSection = currentSection;
+      }
+    };
 
     // Remove all functions bound to mouse events
     var unbindScroll = function () {
@@ -385,9 +387,9 @@
           scrollToPixel(matchedObject[0].offsetTop + sectionWrapperTop, 0);
         }
       }
-      
+
       // sections changes
-      
+
       if (options.eventEmitter !== null) {
         sectionChangeListener();
         $(window).bind('scroll.section-change', sectionChangeListener);
